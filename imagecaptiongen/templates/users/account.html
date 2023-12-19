@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+{% block totalpage %}
+<div style="display: flex; justify-content: center; align-items: flex-start; height: 100vh;">
+    <div class="content-section" style="width:50%;">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ image_file }}">
+            <div class="media-body">
+                <h2 class="account-heading" style="margin-top: 1.7rem; margin-left: 1rem;">{{ current_user.username }}</h2>
+                <p class="text-secondary" style="margin-top: 1rem; margin-left: 1rem;">{{ current_user.email }}</p>
+                <div style="display: flex; justify-content: space-between; margin-top: 1rem; margin-left: 1rem;">
+                    <p class="text-secondary membershipType" style="margin-right: 1rem; text-transform: capitalize;">Membership Type: {{ current_user.membership_type }}</p>
+                    {% if current_user.membership_type == 'free' %}
+                        <a href="{{ url_for('main.subscribe') }}" id="subscribeButton" class="btn btn-outline-info">Subscribe</a>
+                    {% else %}
+                        <a href="{{ url_for('main.unsubscribe') }}" id="unsubscribeButton" class="btn btn-outline-info">Unsubscribe</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Account Info</legend>
+                <div class="form-group">
+                    {{ form.username.label(class="form-control-label") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.picture.label() }}
+                    {{ form.picture(class="form-control-file") }}
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+        <div class="modal" id="unsubscribeModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Unsubscribe</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to cancel your premium account?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="confirmUnsubscribe">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="subscribeModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Subscribe</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to upgrade to a premium account?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-success" id="confirmSubscribe">Yes</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+              </div>
+            </div>
+        </div>  
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#subscribeButton').click(function(e) {
+            e.preventDefault();
+            $('#subscribeModal').modal('show');
+        });
+        
+        $('#unsubscribeButton').click(function(e) {
+            e.preventDefault();
+            $('#unsubscribeModal').modal('show');
+        });
+        
+        $('#confirmSubscribe').click(function() {
+            $.ajax({
+            url: '/subscribe',
+            type: 'POST',
+            success: function(response) {
+                // Update the membership_type displayed on the page
+                $('.membershipType').text('Premium');
+                // Close the modal
+                $('#subscribeModal').modal('hide');
+                location.reload();
+            }
+            });
+        });
+        
+        $('#confirmUnsubscribe').click(function() {
+            $.ajax({
+            url: '/unsubscribe',
+            type: 'POST',
+            success: function(response) {
+                // Update the membership_type displayed on the page
+                $('.membershipType').text('Free');
+                // Close the modal
+                $('#unsubscribeModal').modal('hide');
+                location.reload();
+            }
+            });
+        });
+        });
+</script>
+{% endblock %}
+{% block additional_links %}{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="d-flex justify-content-center" style="padding-top: 20px;">
+                    <img src="{{ url_for('static', filename='uploads/'+ image.img) }}" class="card-img-top caption-img" alt="Image" style="width: 100px; height: 100px;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-center">Current Caption:</h6>
+                    <p class="card-text text-center">{{ image.caption }}</p>
+                    <form method="POST" action="{{ url_for('captions.update_caption', img_id=image.id) }}">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.caption(class="form-control", placeholder="Enter new caption") }}
+                        </div>
+                        <div class="text-center">
+                            {{ form.submit(class="btn btn-outline-info") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <form method="POST" action="{{ url_for('captions.select_caption') }}" enctype="multipart/form-data">
+            {% set ns = namespace(counter=0) %}
+            {% for image_filename, image_captions in captions.items() %}
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <img src="{{ url_for('static', filename='uploads/' + img_saved[ns.counter]) }}" alt="Image" class="img-fluid">
+                    </div>
+                </div>
+               
+                <table class="table mt-3">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="model-column">Model</th>
+                            <th scope="col" class="caption-column">Caption</th>
+                            <th scope="col" class="select-column">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for model, caption in image_captions.items() %}
+                            <tr>
+                                <td style="text-transform: uppercase;">{{ model }}</td>
+                                <td>
+                                    <span class="caption-text">{{ caption }}</span>
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selected_captions[{{ image_filename }}]" value="{{ caption }}" id="{{ ns.counter }}-{{ model }}-{{ image_filename }}">
+                                        <input type="hidden" name="image_filename[{{ image_filename }}]" value="{{ image_filename }}">
+                                        <input type="hidden" name="img_saved[{{ image_filename }}]" value="{{ img_saved[ns.counter] }}">
+                                        <input type="hidden" name="selected_model[{{ image_filename }}]" value="{{ model }}" class="model-input" id="model-{{ ns.counter }}-{{ model }}-{{ image_filename }}">
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% set ns.counter = ns.counter + 1 %}
+            {% endfor %}
+            <div class="row justify-content-center mt-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+    <script>
+                // Disable all model inputs initially
+        document.querySelectorAll('.model-input').forEach(function(input) {
+            input.disabled = true;
+        });
+
+        document.querySelectorAll('.form-check-input').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                // Disable all model inputs for the current image
+                var imageFilename = this.name.split('[')[1].split(']')[0];
+                document.querySelectorAll('input[name="selected_model[' + imageFilename + ']"]').forEach(function(input) {
+                    input.disabled = true;
+                });
+                // Enable the model input corresponding to the selected caption
+                var idParts = this.id.split('-');
+                var index = idParts[0];
+                var model = idParts[1];
+                document.getElementById('model-' + index + '-' + model + '-' + imageFilename).disabled = false;
+            });
+        });
+    </script>
+{% endblock %}

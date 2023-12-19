@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block totalpage %}
+    {% if current_user.is_anonymous %}
+    <div class="jumbotron" style=" padding:5%; width:auto; height: auto; background-color: white; display: flex; justify-content: center; align-items: center;flex-direction: column; ">
+        <div class="content-section" style="width: 90%; border: 0cap; text-align: center;">
+            <h2>Welcome to Caption Generator!!</h2>
+            <p>Generate captions for your images effortlessly.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Free Trial</h3>
+                        <p class="card-text">Try our service for free! </br>
+                            Sign up now and get 5 free predictions.</p>
+                        <a class="btn btn-primary" href="{{ url_for('users.register') }}">Start Free Trial</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card border-primary mb-3" style="background-color: #2B50AA; color: white; box-shadow: 0 0 10px rgba(0,0,0,0.5); font-family: 'Roboto', sans-serif;">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: white;">Try Premium</h3>
+                        <p class="card-text">For unlimited predictions and additional features.</br>
+                            Only for $5/month
+                        </p>
+                       </br>
+                        <a href="{{ url_for('users.register', membership_type='premium') }}" class="btn btn-light" style="color: #2B50AA; font-weight: bold;"> Create Premium Account </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

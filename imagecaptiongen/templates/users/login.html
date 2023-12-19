@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block totalpage %}
+<div style="display: flex; justify-content: center; align-items: flex-start; height: 100vh;">
+    <div class="content-section" style="width:50%;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Log In</legend>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group password-wrapper">
+                    {{ form.password.label(class="form-control-label") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <button id="togglePassword" class="toggle-password">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg") }}
+                        <button id="togglePassword" class="toggle-password">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                    {% endif %}
+                </div>
+                <div class="form-check">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+                <small class="text-muted ml-2">
+                    <a href="{{ url_for('users.reset_request') }}">Forgot Password?</a>
+                </small>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Need An Account? <a class="ml-2" href="{{ url_for('users.register') }}">Sign Up Now</a>
+            </small>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent the default action
+        const passwordInput = document.querySelector('.password-wrapper .form-control');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash'); // toggle the eye slash icon
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,133 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #fafafa;
+  color: #333333;
+  margin-top: 5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
+
+.bg-steel {
+  background-color: #5f788a;
+}
+
+
+.site-header .navbar-nav .nav-link {
+  display: flex;
+  justify-content: center;
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 10px;
+  margin-bottom: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.account-heading {
+  font-size: 1.5rem;
+}
+
+.caption-img {
+  height: 175px;
+  width: 225px;
+  margin-right: 5px;
+  margin-bottom: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.caption-heading {
+  font-size: 1.5rem;
+}
+/* Style the search input */
+.search-input {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  padding: 10px; /* Adjust padding as needed */
+}
+
+/* Style the search button */
+/* Style the search button */
+.btn-search {
+  position: absolute;
+  top: 50%;
+  right: 38px; /* Adjust the right distance as needed */
+  transform: translateY(-50%);
+  background-color: #ffffff;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Hover effect for the search button */
+.btn-search:hover {
+  background-color: #d3dae1;
+}
+
+
+.rating {
+  width: 180px;
+}
+
+.rating__star {
+  cursor: pointer;
+  color: #dabd18b2;
+}
+
+
+.password-wrapper {
+  position: relative;
+}
+
+.form-control {
+  padding-right: 40px; /* Make room for the eye icon */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #cbd5db;
+}

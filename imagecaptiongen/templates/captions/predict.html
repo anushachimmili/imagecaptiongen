@@ -1,0 +1,61 @@
+<!-- predict.html -->
+{% extends "layout.html" %}
+{% block content %}
+    <h6 style="font-size:18px; color:rgb(92, 92, 121); margin-top: 1rem;">Upload an image or provide an image URL to generate captions and choose a model</h6>
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('captions.predict') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group" style="margin-left: 2rem; margin-top: 1rem; width: 88%">
+            {{ form.image_pred.label(class="form-control-label") }}
+            {{ form.image_pred(class="form-control", multiple="multiple") }}
+            {% if form.image_pred.errors %}
+                <div class="alert alert-danger">
+                    {{ form.image_pred.errors[0] }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group" style="margin-left: 2rem; margin-top: 1rem; width: 88%;">
+            {{ form.url_image.label(class="form-control-label") }}
+            {{ form.url_image(class="form-control") }}
+            {% if form.url_image.errors %}
+                <div class="alert alert-danger">
+                    {{ form.url_image.errors[0] }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group" style="margin-left: 2rem; margin-top: 1rem; width: 88%;">
+            <label class="form-control-label">Select Model</label>
+            <br>
+            {% for model in form.model %}
+                <div class="form-check form-check-inline">
+                    {{ model(class="form-check-input") }}
+                    {{ model.label(class="form-check-label") }}
+                </div>
+            {% endfor %}
+            {% if form.model.errors %}
+                <div class="alert alert-danger">
+                    {{ form.model.errors[0] }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group" style="margin-left: 2rem; margin-top: 1.2rem;">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+
+{% endblock%}
+{% block sidebar %}
+<div class="container" style="border-radius: 5px;border: 1px solid rgb(222, 221, 221);">
+    <p style="margin-top: 1rem;"> {{g.scored_model}} model chosen {{g.max_score}} out of 10 times</p>
+    <canvas id="myChart" height="220" style="margin-top: 1.5rem;"></canvas>
+    <!-- Include Chart.js -->
+    <script>
+        var blipAvg = {{ g.blip_avg|tojson|safe if g.blip_avg is not none else 0 }};
+        var gitAvg = {{ g.git_avg|tojson|safe if g.git_avg is not none else 0 }};
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include chartjs-plugin-datalabels -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="{{ url_for('static', filename='modelchart.js')}}"></script>
+</div>
+{% endblock%}

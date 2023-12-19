@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+{% block totalpage %}
+<div style="display: flex; justify-content: center; align-items: flex-start; height: 100vh;">
+    <div class="content-section" style="width:50%;">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Join Today</legend>
+                <div class="form-group">
+                    {{ form.username.label(class="form-control-label") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group password-wrapper">
+                    {{ form.password.label(class="form-control-label") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group password-wrapper">
+                    {{ form.confirm_password.label(class="form-control-label") }}
+                    {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" onclick="togglePasswordVisibility()"> Show Password
+                </div>
+                <div class="form-group">
+                    {{ form.membership_type.label(class="form-control-label") }}
+                    {% if form.membership_type.errors %}
+                        {{ form.membership_type(class="form-control form-control-lg is-invalid", style="font-size:15px;") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.membership_type.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.membership_type(class="form-control form-control-lg", style="font-size:15px;") }}
+                    {% endif %}
+                </div>
+                <input type="hidden" id="paymentConfirmed" name="paymentConfirmed" value="false">
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+        <div class="modal" tabindex="-1" role="dialog" id="paymentModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Payment Confirmation</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you want to proceed with the payment?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" id="confirmPayment">Yes</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already Have An Account? <a class="ml-2" href="{{ url_for('users.login') }}">Sign In</a>
+            </small>
+        </div>
+    </div>
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInputs = document.querySelectorAll('.password-wrapper input[type="password"], .password-wrapper input[type="text"]');
+            passwordInputs.forEach(input => {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+            });
+        }
+
+        $(document).ready(function() {
+        $('form').submit(function(e) {
+            if ($('select[name="membership_type"]').val() === 'Premium' && $('#paymentConfirmed').val() === 'false') {
+            e.preventDefault();
+            $('#paymentModal').modal('show');
+            }
+        });
+
+        $('#confirmPayment').click(function() {
+            $('#paymentConfirmed').val('true');
+            $('form').submit();
+        });
+        });
+    </script>
+</div>
+{% endblock %}

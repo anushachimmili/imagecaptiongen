@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<form action="{{ url_for('main.payment', membership_type=membership_type ) }}" method="post" class="stripe-payment">
+    <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="{{ key }}"
+        data-amount="500"
+        data-name="Premium Membership"
+        data-description="Upgrade to a premium membership"
+        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+        data-locale="auto"
+        data-zip-code="true">
+    </script>
+</form>
+{% endblock %}
